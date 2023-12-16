@@ -63,7 +63,7 @@ fun <T>List<T>.nextOf(
  * @param boundConflict The behavior when reaching the bound, see [BoundConflict] for more info.
  */
 fun <T>List<T>.previousOf(
-    element: T?,
+    element: T,
     boundConflict: BoundConflict = NULL
 ): T?
 {
