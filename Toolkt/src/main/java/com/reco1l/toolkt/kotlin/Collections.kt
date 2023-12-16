@@ -1,5 +1,6 @@
 package com.reco1l.toolkt.kotlin
 
+import com.reco1l.toolkt.kotlin.BoundConflict.*
 import kotlin.reflect.KClass
 
 
@@ -8,51 +9,83 @@ import kotlin.reflect.KClass
  */
 fun <T : Any> MutableCollection<T>.addIfNotNull(element: T?) = element?.let { add(it) } ?: false
 
+
 /**
- * Returns the next element from the passed element or `null` if there's no next element.
- *
- * Note: This will never return the same object than the passed in [element].
- *
- * @param clampToBounds If `true` when reaching the max bound it'll return `null` instead of truncating
- * to first element.
+ * Defines the behavior when reaching the bound.
+ */
+enum class BoundConflict
+{
+    /**
+     * Once the bound is reached it'll return `null`.
+     */
+    NULL,
+    /**
+     * Once the bound is reached it'll return the same object.
+     */
+    CLAMP,
+    /**
+     * Once the bound is reached it'll return the first or last element.
+     */
+    START_END
+}
+
+
+/**
+ * Returns the next element in the list from the passed element.
+ * @param boundConflict The behavior when reaching the bound, see [BoundConflict] for more info.
  */
 fun <T>List<T>.nextOf(
-    element: T?,
-    clampToBounds: Boolean = false
+    element: T,
+    boundConflict: BoundConflict = NULL
 ): T?
 {
-    var index = indexOf(element ?: return null) + 1
+    var index = indexOf(element)
 
-    index = if (clampToBounds)
-        index.coerceAtMost(lastIndex)
-    else
-        if (index > lastIndex) 0 else index
+    if (index == -1)
+        throw IllegalArgumentException("The passed element isn't present in the list.")
 
-    return getOrNull(index)
+    index++
+
+    if (index > lastIndex)
+    {
+        return when(boundConflict)
+        {
+            NULL -> null
+            CLAMP -> element
+            START_END -> get(0)
+        }
+    }
+    return get(index)
 }
 
 /**
- * Returns the previous element from the passed element or `null` if there's no previous element.
- *
- * Note: This will never return the same object than the passed in [element].
- *
- * @param clampToBounds If `true` when reaching the min bound it'll return `null` instead of skipping
- * to last element.
+ * Returns the previous element in the list from the passed element.
+ * @param boundConflict The behavior when reaching the bound, see [BoundConflict] for more info.
  */
 fun <T>List<T>.previousOf(
     element: T?,
-    clampToBounds: Boolean = true
+    boundConflict: BoundConflict = NULL
 ): T?
 {
-    var index = indexOf(element ?: return null) - 1
+    var index = indexOf(element)
 
-    index = if (clampToBounds)
-        index.coerceAtLeast(0)
-    else
-        if (index < 0) lastIndex else index
+    if (index == -1)
+        throw IllegalArgumentException("The passed element isn't present in the list.")
 
-    return getOrNull(index)
+    index--
+
+    if (index < 0)
+    {
+        return when(boundConflict)
+        {
+            NULL -> null
+            CLAMP -> element
+            START_END -> get(lastIndex)
+        }
+    }
+    return get(index)
 }
+
 
 /**
  * Iterates all over the list removing the elements from start or from the end depending of [reversed]
