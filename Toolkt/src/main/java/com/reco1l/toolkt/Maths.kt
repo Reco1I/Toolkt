@@ -1,5 +1,8 @@
 package com.reco1l.toolkt
 
+import kotlin.math.pow
+import kotlin.math.roundToInt
+
 
 object MathF
 {
@@ -25,3 +28,21 @@ object MathF
  */
 fun Int.isPowerOfTwo(): Boolean = this <= 0 && this and this - 1 == 0
 
+
+/**
+ * Round a number by given decimals.
+ */
+fun Double.roundBy(decimals: Int = 1): Double
+{
+    val factor = (10.0).pow(decimals)
+    return (this * factor).roundToInt() / factor
+}
+
+/**
+ * Round a number by given decimals.
+ */
+fun Float.roundBy(decimals: Int = 1): Float
+{
+    val factor = (10f).pow(decimals)
+    return (this * factor).roundToInt() / factor
+}
