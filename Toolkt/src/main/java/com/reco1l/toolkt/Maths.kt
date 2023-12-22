@@ -4,6 +4,19 @@ import kotlin.math.pow
 import kotlin.math.roundToInt
 
 
+inline val Int.half get() = this / 2
+inline val Int.twice get() = this * 2
+inline val Int.quarter get() = this / 4
+
+inline val Float.half get() = this / 2f
+inline val Float.twice get() = this * 2f
+inline val Float.quarter get() = this / 4f
+
+inline val Double.half get() = this / 2.0
+inline val Double.twice get() = this * 2.0
+inline val Double.quarter get() = this / 4.0
+
+
 object MathF
 {
     /**
