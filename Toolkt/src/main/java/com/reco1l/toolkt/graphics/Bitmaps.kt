@@ -32,10 +32,10 @@ fun Options.calculateDimensions(file: File): Options
  *
  * @see BitmapFactory.Options.inSampleSize
  */
-fun Options.approximateSampleSize(targetWidth: Int, targetHeight: Int): Int
+fun Options.approximateSampleSize(targetWidth: Int, targetHeight: Int): Options
 {
     if (outWidth <= targetWidth && outHeight <= targetHeight)
-        return 1
+        return this
 
     var size = 1
 
@@ -43,7 +43,7 @@ fun Options.approximateSampleSize(targetWidth: Int, targetHeight: Int): Int
         size *= 2
 
     inSampleSize = size
-    return size
+    return this
 }
 
 
