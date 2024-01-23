@@ -25,14 +25,9 @@ object MathF
     const val PI = 3.1415927f
 
     /**
-     * Half of [PI].
+     * Square root of 2.
      */
-    const val PI_HALF = PI / 2f
-
-    /**
-     * Two times [PI]
-     */
-    const val PI_TWICE = PI * 2f
+    const val SQRT_2 = 1.4142135f
 }
 
 
@@ -59,3 +54,12 @@ fun Float.roundBy(decimals: Int = 1): Float
     val factor = (10f).pow(decimals)
     return (this * factor).roundToInt() / factor
 }
+
+
+fun Float.toRadians() = this * MathF.PI / 180f
+
+fun Float.toDegrees() = this * 180f / MathF.PI
+
+fun Double.toRadians() = this * MathF.PI / 180.0
+
+fun Double.toDegrees() = this * 180.0 / MathF.PI
