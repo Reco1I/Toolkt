@@ -28,6 +28,16 @@ object MathF
      * Square root of 2.
      */
     const val SQRT_2 = 1.4142135f
+
+    /**
+     * Conversion factor for degrees to radians.
+     */
+    const val DEG_TO_RAD = PI / 180f
+
+    /**
+     * Conversion factor for radians to degrees.
+     */
+    const val RAD_TO_DEG = 180f / PI
 }
 
 
@@ -56,10 +66,8 @@ fun Float.roundBy(decimals: Int = 1): Float
 }
 
 
-fun Float.toRadians() = this * MathF.PI / 180f
+fun Float.toRadians() = this * MathF.DEG_TO_RAD
+fun Double.toRadians() = this * MathF.DEG_TO_RAD
 
-fun Float.toDegrees() = this * 180f / MathF.PI
-
-fun Double.toRadians() = this * MathF.PI / 180.0
-
-fun Double.toDegrees() = this * 180.0 / MathF.PI
+fun Float.toDegrees() = this * MathF.RAD_TO_DEG
+fun Double.toDegrees() = this * MathF.RAD_TO_DEG
