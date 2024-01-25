@@ -1,3 +1,4 @@
+
 package com.reco1l.toolkt.kotlin
 
 import com.reco1l.toolkt.kotlin.BoundConflict.*
@@ -5,10 +6,20 @@ import kotlin.reflect.KClass
 
 
 /**
+ * Safe check if an element is in a nullable array. If the array is null then the result is `false`.
+ */
+infix fun <T>T.safeIn(array: Array<T>?): Boolean = array != null && this in array
+
+
+// Addition
+
+/**
  * Add an element if the passed element isn't null.
  */
 fun <T : Any> MutableCollection<T>.addIfNotNull(element: T?) = element?.let { add(it) } ?: false
 
+
+// Peeking
 
 /**
  * Defines the behavior when reaching the bound.
@@ -48,7 +59,7 @@ fun <T>List<T>.nextOf(
 
     if (index > lastIndex)
     {
-        return when(boundConflict)
+        return when (boundConflict)
         {
             NULL -> null
             CLAMP -> element
@@ -87,6 +98,43 @@ fun <T>List<T>.previousOf(
 }
 
 
+// Loops
+
+/**
+ * Iterates all over the list.
+ *
+ * Kotlin's standard [forEach][Iterable.forEach] uses an [Iterator] internally which can lead to a
+ * performance penalty in some cases due to allocation.
+ *
+ * This should be used with precaution, when a list is modified while iterating it can throw an
+ * [ArrayIndexOutOfBoundsException] rather than a [ConcurrentModificationException].
+ */
+inline fun <T> MutableList<T>.fastForEach(block: (T) -> Unit)
+{
+    val size = size
+
+    var i = 0
+    while (i < size)
+    {
+        block(get(i))
+        ++i
+    }
+}
+
+/**
+ * Same as [fastForEach] but with indexes.
+ */
+inline fun <T> MutableList<T>.fastForEachIndexed(block: (index: Int, element: T) -> Unit)
+{
+    var i = 0
+    while (i < size)
+    {
+        block(i, get(i))
+        ++i
+    }
+}
+
+
 /**
  * Iterates all over the list removing the elements from start or from the end depending of [reversed]
  * parameter.
@@ -107,6 +155,9 @@ inline fun <T, R : Any?>Array<T>.forEachLet(block: (T) -> R): R?
     return result
 }
 
+
+// Mappings
+
 /**
  * Covers the same functions as [associateWith] with indices.
  */
@@ -120,12 +171,10 @@ inline fun <K, V> Iterable<K>.associateWithIndexed(valueSelector: (K, Int) -> V)
     }
 }
 
+
+// Instances
+
 /**
  * Store instances from a class inheritors as singletons.
  */
 fun <T : Any>instanceMapOf() = HashMap<KClass<out T>, T>()
-
-/**
- * Safe check if an element is in a nullable array. If the array is null then the result is `false`.
- */
-infix fun <T>T.safeIn(array: Array<T>?): Boolean = array != null && this in array
