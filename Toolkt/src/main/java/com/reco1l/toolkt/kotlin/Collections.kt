@@ -138,7 +138,7 @@ fun <T>List<T>.previousOf(
  * This should be used with precaution, when a list is modified while iterating it can throw an
  * [ArrayIndexOutOfBoundsException] rather than a [ConcurrentModificationException].
  */
-inline fun <T> MutableList<T>.fastForEach(block: (T) -> Unit)
+inline fun <T> List<T>.fastForEach(block: (T) -> Unit)
 {
     val size = size
 
@@ -153,7 +153,7 @@ inline fun <T> MutableList<T>.fastForEach(block: (T) -> Unit)
 /**
  * Same as [fastForEach] but with indexes.
  */
-inline fun <T> MutableList<T>.fastForEachIndexed(block: (index: Int, element: T) -> Unit)
+inline fun <T> List<T>.fastForEachIndexed(block: (index: Int, element: T) -> Unit)
 {
     var i = 0
     while (i < size)
