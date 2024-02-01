@@ -5,10 +5,39 @@ import com.reco1l.toolkt.kotlin.BoundConflict.*
 import kotlin.reflect.KClass
 
 
+// Checks
+
 /**
  * Safe check if an element is in a nullable array. If the array is null then the result is `false`.
  */
 infix fun <T>T.safeIn(array: Array<T>?): Boolean = array != null && this in array
+
+
+/**
+ * Finds if there's any coincidence between two lists.
+ */
+fun <T> List<T>.anyCoincidence(other: Collection<T>): Boolean
+{
+    for (i in indices)
+    {
+        if (get(i) in other)
+            return true
+    }
+    return false
+}
+
+/**
+ * Finds if there's any difference between two lists.
+ */
+fun <T> List<T>.anyDifference(other: Collection<T>): Boolean
+{
+    for (i in indices)
+    {
+        if (get(i) !in other)
+            return true
+    }
+    return false
+}
 
 
 // Addition
