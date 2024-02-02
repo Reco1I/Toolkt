@@ -177,10 +177,10 @@ inline fun <T>MutableList<T>.forEachTrim(reversed: Boolean = false, block: (T) -
 /**
  * Iterates all over the list transforming the result and returning it at the end.
  */
-inline fun <T, R : Any?>Array<T>.forEachLet(block: (T) -> R): R?
+inline fun <T, R : Any?>Array<T>.forEachLet(block: (element: T, result: R?) -> R?): R?
 {
     var result: R? = null
-    forEach { result = block(it) }
+    forEach { result = block(it, result) }
     return result
 }
 
@@ -198,6 +198,18 @@ inline fun <K, V> Iterable<K>.associateWithIndexed(valueSelector: (K, Int) -> V)
         index++
         value
     }
+}
+
+/**
+ * Returns the sum of all values produced by [selector] function applied to each element in the array.
+ *
+ * Note: This is a missing function in Kotlin standard library may be implemented later.
+ */
+inline fun <T> Array<out T>.sumOf(selector: (T) -> Float): Float {
+    var sum = 0f
+    for (element in this)
+        sum += selector(element)
+    return sum
 }
 
 
