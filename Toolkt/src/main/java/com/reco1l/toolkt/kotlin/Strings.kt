@@ -45,6 +45,7 @@ operator fun Char.times(times: Int): CharSequence
     return result
 }
 
+
 // Regex
 
 fun String.takeIfMatches(regex: Regex) = takeIf { regex.matches(it) }
@@ -173,4 +174,62 @@ fun String.withTranslatedEscapes(ignoreInvalidSequences: Boolean = true): String
         sequence[to++] = ch
     }
     return sequence.concatToString(endIndex = to)
+}
+
+
+// Conversion
+
+/**
+ * Splits a camel case string into a string separated by a defined character between words.
+ * As expected from a camel case string, this methods splits words by the first letter case considering
+ * an uppercase sequence as the next word.
+ *
+ * On the other hand there's some edge case handling for words abreviation such as 'ID' or 'URL',
+ * since those are abreviated there are several uppercase letters in a row and in that case the
+ * sequence is considered as a full word instead. The sequence will be considered as ended if the
+ * last character has a following lowercase character or the next character is a whitespace.
+ *
+ * Examples:
+ * * `userID` is splited into `User ID`
+ * * `userName` is splited into `User name`
+ * * `userURLForAvatar` is splited into `User URL for avatar`
+ *
+ * @param input The camel case string.
+ * @param separator The separator character, by default a single whitespace.
+ * @param lowercaseWords Whether the words (excluding the first one) should be lowercased.
+ * @param capitalize Whether the first word should be capitalized.
+ */
+@JvmOverloads
+fun splitCamelCase(
+    input: String,
+    separator: String = " ",
+    lowercaseWords: Boolean = true,
+    capitalize: Boolean = true
+    ): String
+{
+    var r = ""
+
+    for (i in input.indices)
+    {
+        val char = input[i]
+
+        val p = if (i > 0) input[i - 1] else ' '
+        val n = if (i < input.length - 1) input[i + 1] else ' '
+
+        if (char.isLowerCase())
+            r += if (i == 0 && capitalize)
+                char.uppercaseChar()
+            else
+                char
+        else
+            r += if (p.isUpperCase() && n.isUpperCase() || n == ' ')
+                char
+            else
+                separator + if (lowercaseWords)
+                    char.lowercaseChar()
+                else
+                    char
+    }
+
+    return r
 }
