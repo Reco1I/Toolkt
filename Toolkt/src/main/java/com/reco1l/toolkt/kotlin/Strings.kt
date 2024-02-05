@@ -199,22 +199,20 @@ fun String.withTranslatedEscapes(ignoreInvalidSequences: Boolean = true): String
  * @param lowercaseWords Whether the words (excluding the first one) should be lowercased.
  * @param capitalize Whether the first word should be capitalized.
  */
-@JvmOverloads
-fun splitCamelCase(
-    input: String,
+fun String.splitCamelCase(
     separator: String = " ",
-    lowercaseWords: Boolean = true,
-    capitalize: Boolean = true
-    ): String
+    capitalize: Boolean = true,
+    lowercaseWords: Boolean = true
+): String
 {
     var r = ""
 
-    for (i in input.indices)
+    for (i in indices)
     {
-        val char = input[i]
+        val char = get(i)
 
-        val p = if (i > 0) input[i - 1] else ' '
-        val n = if (i < input.length - 1) input[i + 1] else ' '
+        val p = if (i > 0) get(i - 1) else ' '
+        val n = if (i < length - 1) get(i + 1) else ' '
 
         if (char.isLowerCase())
             r += if (i == 0 && capitalize)
