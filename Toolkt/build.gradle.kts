@@ -48,7 +48,7 @@ publishing {
         register<MavenPublication>("release") {
             groupId = "com.github.Reco1I"
             artifactId = "Toolkt"
-            version = "1.1.7"
+            version = "1.1.8"
 
             afterEvaluate {
                 from(components["release"])
