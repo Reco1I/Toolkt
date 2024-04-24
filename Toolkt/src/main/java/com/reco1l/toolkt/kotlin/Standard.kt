@@ -1,8 +1,8 @@
 package com.reco1l.toolkt.kotlin
 
-import java.text.SimpleDateFormat
-import java.util.TimeZone
 
+
+// Cast
 
 /**
  * This converts the string to boolean allowing numeric booleans (`1` for `true` and `0` for `false`).
@@ -16,11 +16,15 @@ fun String.toBooleanOrNull(): Boolean?
 }
 
 
-fun dateFormatFor(ms: Long): SimpleDateFormat
-{
-    @Suppress("SimpleDateFormat")
-    return SimpleDateFormat(if (ms > 3600 * 1000) "HH:mm:ss" else "mm:ss").apply {
+// Scope functions
 
-        timeZone = TimeZone.getTimeZone("GMT+0")
+/**
+ * Special block to ignore exceptions
+ */
+inline fun <R : Any> runSafe(block: () -> R?): R? {
+    return try {
+        block()
+    } catch (_: Exception) {
+        null
     }
 }
