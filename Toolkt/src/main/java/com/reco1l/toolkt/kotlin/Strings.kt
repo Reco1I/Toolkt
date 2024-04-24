@@ -1,5 +1,14 @@
 package com.reco1l.toolkt.kotlin
 
+import android.annotation.SuppressLint
+import android.text.format.DateFormat
+import java.net.URLDecoder
+import java.nio.charset.Charset
+import java.nio.charset.StandardCharsets
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
 import kotlin.math.abs
 import kotlin.math.min
 
@@ -48,6 +57,9 @@ operator fun Char.times(times: Int): CharSequence
 
 // Regex
 
+/**
+ * Similar to [takeIf] but takes a [Regex] instead as predicate.
+ */
 fun String.takeIfMatches(regex: Regex) = takeIf { regex.matches(it) }
 
 
@@ -103,6 +115,14 @@ object Regexs
      */
     val ALPHANUMERIC = Regex("^[a-zA-Z0-9]+\$")
 }
+
+
+// Filtering
+
+/**
+ * Replace all characters that are not alphanumeric.
+ */
+fun String.replaceAlphanumeric(with: String = "_") = replace("[^a-zA-Z0-9.\\-]".toRegex(), with)
 
 
 // Escapes
@@ -178,6 +198,50 @@ fun String.withTranslatedEscapes(ignoreInvalidSequences: Boolean = true): String
 
 
 // Conversion
+
+
+/**
+ * Converts a date pattern to a formatted date specified by [date] and returns the converted date as result
+ * using [DateFormat.format] method.
+ *
+ * Example:
+ * * `yyyy/MM/dd hh:mm:ss` gets converted to `2022/01/01 12:00:00` format.
+ *
+ * @param date The date to be converted.
+ * @see DateFormat.format
+ */
+fun String.fromDate(date: Date = Date()) = DateFormat.format(this, date).toString()
+
+
+/**
+ * Converts a time pattern to a formatted time in milliseconds specified by [ms] and returns the
+ * converted time as result.
+ *
+ * Example:
+ * * `HH:mm:ss` gets converted to `12:00:00` format.
+ *
+ * @param ms The time to be converted.
+ * @see SimpleDateFormat
+ */
+fun String.formatTimeMilliseconds(ms: Long): String
+{
+    @SuppressLint("SimpleDateFormat")
+    val sdf = SimpleDateFormat(this)
+    sdf.timeZone = TimeZone.getTimeZone("GTM+0")
+
+    return sdf.format(ms)!!
+}
+
+
+
+/**
+ * Decodes an URL encoded string according to the specified charset, by default UTF 8.
+ *
+ * @param charset The charset to be used.
+ * @see URLDecoder.decode
+ */
+fun String.decodeAsURL(charset: Charset = Charset.defaultCharset()) = URLDecoder.decode(this, charset.name())
+
 
 /**
  * Splits a camel case string into a string separated by a defined character between words.
