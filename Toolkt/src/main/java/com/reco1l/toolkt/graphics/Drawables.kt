@@ -4,8 +4,10 @@ import android.graphics.drawable.ClipDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.LayerDrawable
+import android.os.Build
 import android.view.Gravity
-import com.reco1l.toolkt.kotlin.orCatch
+import androidx.annotation.RequiresApi
+import com.reco1l.toolkt.kotlin.runSafe
 
 
 // ClipDrawable
@@ -46,10 +48,7 @@ fun LayerDrawable(vararg layers: Drawable) = LayerDrawable(layers)
  */
 fun GradientDrawable.setRadius(radius: Float, @CornerAnchor anchor: Int? = null)
 {
-    // orCatch -> Apparently in API 24 the method "getCornerRadii()" causes an NPE by itself if there
-    // wasn't a corner radii previously set, this is fixed in newer APIs but for older we've to handle
-    // the bug thanks Android.
-    val radii = { cornerRadii }.orCatch { null } ?: FloatArray(8)
+    val radii = FloatArray(8)
 
     if (anchor == null)
     {
