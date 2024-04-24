@@ -4,10 +4,8 @@ import android.annotation.SuppressLint
 import android.text.format.DateFormat
 import java.net.URLDecoder
 import java.nio.charset.Charset
-import java.nio.charset.StandardCharsets
 import java.text.SimpleDateFormat
 import java.util.Date
-import java.util.Locale
 import java.util.TimeZone
 import kotlin.math.abs
 import kotlin.math.min
@@ -26,7 +24,10 @@ fun String.decapitalize() = replaceFirstChar { it.lowercase() }
 
 // Ranges
 
-infix fun String.isBetween(range: CharRange) = startsWith(range.first) && endsWith(range.last)
+/**
+ * Checks if a string is between a character pair.
+ */
+infix fun String.isBetween(pair: Pair<Char, Char>) = startsWith(pair.first) && endsWith(pair.second)
 
 /**
  * Returns a substring cropped between the specified characters or `null` if it doesn't contains
