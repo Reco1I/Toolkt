@@ -1,5 +1,7 @@
 package com.reco1l.toolkt.data
 
+import okhttp3.HttpUrl
+import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okio.BufferedSource
@@ -12,11 +14,15 @@ import okio.BufferedSource
  */
 fun buildRequest(block: Request.Builder.() -> Unit) = Request.Builder().apply(block).build()
 
-
 /**
  *  Build an OkHttps3 HTTP client.
  */
 fun buildClient(block: OkHttpClient.Builder.() -> Unit) = OkHttpClient.Builder().apply(block).build()
+
+/**
+ * Build an OkHttps3 HTTP url.
+ */
+fun buildUrl(base: String, block: HttpUrl.Builder.() -> Unit) = base.toHttpUrl().newBuilder().apply(block).build()
 
 
 // Buffers
