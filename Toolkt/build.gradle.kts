@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.reco1l.toolkt"
+    namespace = "com.reco1l.Toolkt"
     compileSdk = 34
 
     defaultConfig {
@@ -41,7 +41,6 @@ dependencies {
     implementation(libs.androidx.recyclerview)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.kotlinx.coroutines.core.jvm)
-    implementation(fileTree("libs") { include("*.jar") })
 }
 
 publishing {
