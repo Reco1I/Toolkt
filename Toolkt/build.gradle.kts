@@ -31,6 +31,15 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
+
+    publishing {
+        publishing {
+            singleVariant("release") {
+                withSourcesJar()
+                withJavadocJar()
+            }
+        }
+    }
 }
 
 dependencies {
@@ -48,7 +57,7 @@ publishing {
         register<MavenPublication>("release") {
             groupId = "com.github.Reco1I"
             artifactId = "Toolkt"
-            version = "1.1.8"
+            version = "1.1.10"
 
             afterEvaluate {
                 from(components["release"])
