@@ -31,15 +31,6 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
-
-    publishing {
-        publishing {
-            singleVariant("release") {
-                withSourcesJar()
-                withJavadocJar()
-            }
-        }
-    }
 }
 
 dependencies {
@@ -50,6 +41,7 @@ dependencies {
     implementation(libs.androidx.recyclerview)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.kotlinx.coroutines.core.jvm)
+    implementation(fileTree("libs") { include("*.jar") })
 }
 
 publishing {
