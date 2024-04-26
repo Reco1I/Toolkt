@@ -45,7 +45,7 @@ dependencies {
 
 publishing {
     publications {
-        register<MavenPublication>("release") {
+        register<MavenPublication>("all") {
             groupId = "com.github.Reco1I"
             artifactId = "Toolkt"
             version = "1.1.10"
