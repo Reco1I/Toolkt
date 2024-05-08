@@ -79,16 +79,16 @@ var View.rightPadding
 /// Typed values
 
 val Float.dp
-    get() = TypedValue.applyDimension(COMPLEX_UNIT_DIP, this, Resources.getSystem().displayMetrics)
+    get() = TypedValue.applyDimension(COMPLEX_UNIT_DIP, this, Resources.getSystem().displayMetrics).toInt()
 
-fun Float.dp(context: Context): Float {
-    return TypedValue.applyDimension(COMPLEX_UNIT_DIP, this, context.resources.displayMetrics)
+fun Float.dp(context: Context): Int {
+    return TypedValue.applyDimension(COMPLEX_UNIT_DIP, this, context.resources.displayMetrics).toInt()
 }
 
 
 val Float.sp
-    get() = TypedValue.applyDimension(COMPLEX_UNIT_SP, this, Resources.getSystem().displayMetrics)
+    get() = TypedValue.applyDimension(COMPLEX_UNIT_SP, this, Resources.getSystem().displayMetrics).toInt()
 
-fun Float.sp(context: Context): Float {
-    return TypedValue.applyDimension(COMPLEX_UNIT_SP, this, context.resources.displayMetrics)
+fun Float.sp(context: Context): Int {
+    return TypedValue.applyDimension(COMPLEX_UNIT_SP, this, context.resources.displayMetrics).toInt()
 }
