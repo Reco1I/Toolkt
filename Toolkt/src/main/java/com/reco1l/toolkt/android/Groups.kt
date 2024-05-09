@@ -7,8 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 var RecyclerView.orientation
     get() = (layoutManager as? LinearLayoutManager)?.orientation
-    set(value)
-    {
+    set(value) {
         if (layoutManager !is LinearLayoutManager) {
             layoutManager = LinearLayoutManager(context)
         }

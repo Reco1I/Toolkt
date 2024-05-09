@@ -73,7 +73,6 @@ var View.cornerRadius: Float
  * @see[View.getLocationInWindow]
  */
 fun View.getAbsolutePosition(output: IntArray = IntArray(2)): IntArray {
-
     return output.also { getLocationInWindow(it) }
 }
 
@@ -93,8 +92,7 @@ fun View.ensureLayoutParams() {
 /**
  * Ensures that the view will always have a unique ID, if not a random one is generated.
  */
-fun View.ensureID()
-{
+fun View.ensureID() {
     if (id == NO_ID) {
         id = View.generateViewId()
     }
