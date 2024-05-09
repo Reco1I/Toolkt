@@ -26,7 +26,9 @@ var TextView.fontColor: Int
  */
 var TextView.fontSize: Float
     get() = textSize
-    set(value) = setTextSize(TypedValue.COMPLEX_UNIT_PX, value)
+    set(value) {
+        textSize = value
+    }
 
 /**
  * The current [Typeface].

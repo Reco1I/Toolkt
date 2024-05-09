@@ -9,8 +9,9 @@ var RecyclerView.orientation
     get() = (layoutManager as? LinearLayoutManager)?.orientation
     set(value)
     {
-        if (layoutManager !is LinearLayoutManager)
+        if (layoutManager !is LinearLayoutManager) {
             layoutManager = LinearLayoutManager(context)
+        }
 
         (layoutManager as? LinearLayoutManager)?.orientation = value ?: VERTICAL
     }

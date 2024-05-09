@@ -4,78 +4,63 @@ package com.reco1l.toolkt.android
 
 import android.graphics.Outline
 import android.graphics.drawable.ColorDrawable
+import android.os.Build.VERSION_CODES
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.*
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.view.ViewOutlineProvider
-import androidx.annotation.ColorInt
+import androidx.annotation.RequiresApi
+import androidx.core.view.updateLayoutParams
 import kotlin.math.min
 
 
 // Drawables
 
+/**
+ * The view background color.
+ */
 var View.backgroundColor: Int?
     get() = (background as? ColorDrawable)?.color
-    set(value)
-    {
-        if (value != null)
-            setBackgroundColor(value)
-        else
+    set(value) {
+
+        if (value == null) {
             background = null
-    }
-
-var View.foregroundColor: Int?
-    get() = (foreground as? ColorDrawable)?.color
-    set(value)
-    {
-        if (value != null)
-            setForegroundColor(value)
-        else
-            background = null
-    }
-
-fun View.setForegroundColor(@ColorInt color: Int)
-{
-    var drawable: ColorDrawable? = background as? ColorDrawable
-
-    if (drawable != null)
-    {
-        drawable = drawable.mutate() as ColorDrawable
-        drawable.color = color
-    }
-    else drawable = ColorDrawable(color)
-
-    foreground = drawable
-}
-
-
-// Corner radius
-
-var View.cornerRadius: Float
-    /**
-     * Return the view corner radius.
-     */
-    get() = (outlineProvider as? RoundOutlineProvider)?.radius ?: 0f
-    /**
-     * Set the View corner radius.
-     *
-     * Note: This will replace any previous outline provider with a [RoundOutlineProvider].
-     */
-    set(value)
-    {
-        var provider = outlineProvider as? RoundOutlineProvider
-
-        if (value <= 0 && provider == null)
             return
-
-        if (provider == null)
-        {
-            provider = RoundOutlineProvider()
-            outlineProvider = provider
         }
 
+        (background as? ColorDrawable)?.apply { color = value } ?: run { background = ColorDrawable(value) }
+    }
+
+/**
+ * The view foreground color.
+ */
+var View.foregroundColor: Int?
+    @RequiresApi(VERSION_CODES.M) get() = (foreground as? ColorDrawable)?.color
+    @RequiresApi(VERSION_CODES.M)
+    set(value) {
+
+        if (value == null) {
+            foreground = null
+            return
+        }
+
+        (foreground as? ColorDrawable)?.apply { color = value } ?: run { foreground = ColorDrawable(value) }
+    }
+
+/**
+ * The view corner radius.
+ * Internally uses a custom [ViewOutlineProvider] and it'll replace any previously set.
+ *
+ * @see RoundOutlineProvider
+ */
+var View.cornerRadius: Float
+    get() = (outlineProvider as? RoundOutlineProvider)?.radius ?: 0f
+    set(value) {
+
+        val provider = outlineProvider as? RoundOutlineProvider ?: RoundOutlineProvider().also { outlineProvider = it }
         provider.radius = value
+
         invalidateOutline()
     }
 
@@ -83,62 +68,65 @@ var View.cornerRadius: Float
 // Position
 
 /**
+ * Returns the absolute position in the window.
+ *
  * @see[View.getLocationInWindow]
  */
-val View.absolutePosition: IntArray
-    get() = IntArray(2).apply { getLocationInWindow(this) }
+fun View.getAbsolutePosition(output: IntArray = IntArray(2)): IntArray {
+
+    return output.also { getLocationInWindow(it) }
+}
 
 
 // Safe properties
 
 /**
- * Ensures that the view has layout params, if not a layout params with [WRAP_CONTENT] as
- * dimensions is set.
+ * Ensures that the view will always have layout params, if not a new one with [WRAP_CONTENT] as
+ * both width and height dimensions is set.
  */
-fun View.ensureLayoutParams()
-{
-    if (layoutParams == null)
+fun View.ensureLayoutParams() {
+    if (layoutParams == null) {
         layoutParams = LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
+    }
 }
 
 /**
- * Ensures that the view has an ID, if not a generated ID is set.
+ * Ensures that the view will always have a unique ID, if not a random one is generated.
  */
 fun View.ensureID()
 {
-    if (id == NO_ID)
+    if (id == NO_ID) {
         id = View.generateViewId()
+    }
 }
 
 
 // Size
 
-fun View.setSize(width: Float? = null, height: Float? = null) = setSize(
-    width = width?.toInt(),
-    height = height?.toInt()
-)
+/**
+ * Changes the view width.
+ */
+var View.layoutWidth
+    get() = width
+    set(value) {
+        ensureLayoutParams()
+        updateLayoutParams { width = value }
+    }
 
 /**
- * Set the width and height of the view with defaults.
+ * Changes the view height.
  */
-fun View.setSize(width: Int? = null, height: Int? = null)
-{
-    ensureLayoutParams()
-
-    layoutParams.apply {
-
-        if (width != null)
-            this.width = width
-
-        if (height != null)
-            this.height = height
-
-        requestLayout()
+var View.layoutHeight
+    get() = height
+    set(value) {
+        ensureLayoutParams()
+        updateLayoutParams { height = value }
     }
-}
 
-fun View.setScale(scale: Float)
-{
+/**
+ * Changes the view scale in both axis.
+ */
+fun View.setScale(scale: Float) {
     scaleX = scale
     scaleY = scale
 }
@@ -146,25 +134,12 @@ fun View.setScale(scale: Float)
 
 // Attachment
 
-infix fun <T : View> T.attachTo(parent: ViewGroup): T
-{
-    parent.addView(this)
-    return this
-}
-
 /**
  * Remove self from a parent.
  */
-fun View.removeSelf()
-{
+fun View.removeSelf() {
     (parent as? ViewGroup)?.removeView(this)
 }
-
-
-// Execution
-
-fun View.doPost(block: View.() -> Unit) = post { block() }
-
 
 
 // Round outline
@@ -172,47 +147,27 @@ fun View.doPost(block: View.() -> Unit) = post { block() }
 /**
  * Applies a round outline to the view.
  */
-class RoundOutlineProvider : ViewOutlineProvider()
-{
-
-    /**
-     * Horizontal outline offset.
-     *
-     * Note: You must [invalidate][View.invalidateOutline] the view outline in order to take effect on this.
-     */
-    var offsetX = 0
-
-    /**
-     * Vertical outline offset.
-     *
-     * Note: You must [invalidate][View.invalidateOutline] the view outline in order to take effect on this.
-     */
-    var offsetY = 0
+class RoundOutlineProvider : ViewOutlineProvider() {
 
     /**
      * The corner radius.
      *
      * Note: You must [invalidate][View.invalidateOutline] the view outline in order to take effect on this.
      */
-    var radius: Float = 18f
+    var radius = 0f
 
 
-    override fun getOutline(view: View, outline: Outline)
-    {
+    override fun getOutline(view: View, outline: Outline) {
+
         // Clipping view to outline, without this the rounding will not take effect.
         view.clipToOutline = true
 
-        val width = view.width
-        val height = view.height
-
         // This is a workaround for older devices without Skia support where if the radius is greater
         // than any of the view bounds it'll cause an unexpected visual.
-        val radius = radius.coerceIn(0f, min(width, height) / 2f)
+        val radius = radius.coerceIn(0f, min(view.width, view.height) / 2f)
 
         // Applying corner radius to outline.
-        outline.setRoundRect(0, 0, width, height, radius)
-
-        // Applying offset to outline.
-        outline.offset(offsetX, offsetY)
+        outline.setRoundRect(0, 0, view.width, view.height, radius)
     }
+
 }
