@@ -7,7 +7,7 @@ Toolkt is a library that contains functions and extensions to improve Android de
 In order to use this library in your project you need to add the dependency in your app's module `build.gradle`.
 ```kts
 dependencies {
-    implementation("com.github.Reco1I:Toolkt:1.0.2")
+    implementation("com.github.Reco1I:Toolkt:1.0.15")
 }
 ```
 
