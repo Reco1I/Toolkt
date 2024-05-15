@@ -16,6 +16,7 @@ import androidx.core.view.marginTop
 import androidx.core.view.setPadding
 import androidx.core.view.updateMargins
 import androidx.core.view.updatePadding
+import kotlin.math.max
 
 
 /// Margin
@@ -28,16 +29,39 @@ val View.marginLayoutParams
     get() = layoutParams as? MarginLayoutParams ?: MarginLayoutParams(layoutParams)
 
 
+var View.margin
+    get() = maxOf(topMargin, bottomMargin, leftMargin, rightMargin)
+    set(value) {
+        marginLayoutParams.topMargin = value
+        marginLayoutParams.bottomMargin = value
+        marginLayoutParams.leftMargin = value
+        marginLayoutParams.rightMargin = value
+    }
+
+var View.verticalMargin
+    get() = max(topMargin, bottomMargin)
+    set(value) {
+        marginLayoutParams.topMargin = value
+        marginLayoutParams.bottomMargin = value
+    }
+
+var View.horizontalMargin
+    get() = max(leftMargin, rightMargin)
+    set(value) {
+        marginLayoutParams.leftMargin = value
+        marginLayoutParams.rightMargin = value
+    }
+
 var View.topMargin
     get() = marginTop
     set(value) {
-        marginLayoutParams.updateMargins(top = value)
+        marginLayoutParams.topMargin = value
     }
 
 var View.bottomMargin
     get() = marginBottom
     set(value) {
-        marginLayoutParams.updateMargins(bottom = value)
+        marginLayoutParams.bottomMargin = value
     }
 
 var View.leftMargin
@@ -55,29 +79,33 @@ var View.rightMargin
 
 /// Padding
 
+var View.padding
+    get() = maxOf(topPadding, bottomPadding, leftPadding, rightPadding)
+    set(value) = setPadding(value)
+
+var View.verticalPadding
+    get() = max(topPadding, bottomPadding)
+    set(value) = updatePadding(top = value, bottom = value)
+
+var View.horizontalPadding
+    get() = max(leftPadding, rightPadding)
+    set(value) = updatePadding(left = value, right = value)
+
 var View.topPadding
     get() = paddingTop
-    set(value) {
-        updatePadding(top = value)
-    }
+    set(value) = updatePadding(top = value)
 
 var View.bottomPadding
     get() = paddingBottom
-    set(value) {
-        updatePadding(bottom = value)
-    }
+    set(value) = updatePadding(bottom = value)
 
 var View.leftPadding
     get() = paddingLeft
-    set(value) {
-        updatePadding(left = value)
-    }
+    set(value) = updatePadding(left = value)
 
 var View.rightPadding
     get() = paddingRight
-    set(value) {
-        updatePadding(right = value)
-    }
+    set(value) = updatePadding(right = value)
 
 
 /// Typed values
