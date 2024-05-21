@@ -1,102 +1,150 @@
 package com.reco1l.toolkt.animation
 
-import android.animation.Animator
-import android.animation.Animator.AnimatorListener
-import android.animation.TimeInterpolator
 import android.view.View
 import android.view.ViewPropertyAnimator
 
 
-class AnimatorListenerImpl(init: (AnimatorListenerImpl.() -> Unit)? = null) : AnimatorListener
-{
-    var onStart: (() -> Unit)? = null
-    var onCancel: (() -> Unit)? = null
-    var onRepeat: (() -> Unit)? = null
-    var onEnd: (() -> Unit)? = null
-
-    init
-    {
-        init?.invoke(this)
-    }
-
-    override fun onAnimationStart(animation: Animator) = onStart?.invoke() ?: Unit
-    override fun onAnimationCancel(animation: Animator) = onCancel?.invoke() ?: Unit
-    override fun onAnimationRepeat(animation: Animator) = onRepeat?.invoke() ?: Unit
-    override fun onAnimationEnd(animation: Animator) = onEnd?.invoke() ?: Unit
-}
-
-
 private fun <T> View.animateTo(
-    setProperty: ViewPropertyAnimator.(T) -> ViewPropertyAnimator,
+
+    function: ViewPropertyAnimator.(T) -> ViewPropertyAnimator,
     value: T,
-    end: Long,
+    time: Long,
     delay: Long,
-    ease: TimeInterpolator?,
-    listener: (AnimatorListenerImpl.() -> Unit)?
-): View
-{
+    timeInterpolator: EasingFunction?,
+    onStart: (() -> Unit)? = null,
+    onEnd: (() -> Unit)? = null
+
+): View {
+
     animate().apply {
 
-        setProperty(value)
-        setListener(listener?.let { AnimatorListenerImpl(it) })
+        function(value)
+        withStartAction(onStart)
+        withEndAction(onEnd)
 
-        duration = end
+        duration = time
         startDelay = delay
-        interpolator = ease
+        interpolator = timeInterpolator
 
         start()
     }
+
     return this
 }
 
 
-fun View.cancelAnimators(): View
-{
+fun View.cancelAnimators(): View {
     animate().cancel()
     return this
 }
 
 
 fun View.toAlpha(
-    value: Float,
-    end: Long = 0L,
-    delay: Long = 0L,
-    ease: TimeInterpolator? = null,
-    listener: (AnimatorListenerImpl.() -> Unit)? = null
-) = animateTo(
-    ViewPropertyAnimator::alpha,
-    value, end, delay, ease, listener
-)
 
-fun View.toScale(
     value: Float,
-    end: Long = 0L,
+    time: Long = 0L,
     delay: Long = 0L,
-    ease: TimeInterpolator? = null,
-    listener: (AnimatorListenerImpl.() -> Unit)? = null
-) = animateTo(
-    { scaleX(value); scaleY(value) },
-    value, end, delay, ease, listener
-)
+    ease: EasingFunction? = null,
+    onStart: (() -> Unit)? = null,
+    onEnd: (() -> Unit)? = null
+
+) = animateTo(ViewPropertyAnimator::alpha, value, time, delay, ease, onStart, onEnd)
+
+fun View.toScaleX(
+
+    value: Float,
+    time: Long = 0L,
+    delay: Long = 0L,
+    ease: EasingFunction? = null,
+    onStart: (() -> Unit)? = null,
+    onEnd: (() -> Unit)? = null
+
+) = animateTo(ViewPropertyAnimator::scaleX, value, time, delay, ease, onStart, onEnd)
+
+fun View.toScaleY(
+
+    value: Float,
+    time: Long = 0L,
+    delay: Long = 0L,
+    ease: EasingFunction? = null,
+    onStart: (() -> Unit)? = null,
+    onEnd: (() -> Unit)? = null
+
+) = animateTo(ViewPropertyAnimator::scaleY, value, time, delay, ease, onStart, onEnd)
 
 fun View.toTranslationX(
+
     value: Float,
-    end: Long = 0L,
+    time: Long = 0L,
     delay: Long = 0L,
-    ease: TimeInterpolator? = null,
-    listener: (AnimatorListenerImpl.() -> Unit)? = null
-) = animateTo(
-    ViewPropertyAnimator::translationX,
-    value, end, delay, ease, listener
-)
+    ease: EasingFunction? = null,
+    onStart: (() -> Unit)? = null,
+    onEnd: (() -> Unit)? = null
+
+) = animateTo(ViewPropertyAnimator::translationX, value, time, delay, ease, onStart, onEnd)
 
 fun View.toTranslationY(
+
     value: Float,
-    end: Long = 0L,
+    time: Long = 0L,
     delay: Long = 0L,
-    ease: TimeInterpolator? = null,
-    listener: (AnimatorListenerImpl.() -> Unit)? = null
-) = animateTo(
-    ViewPropertyAnimator::translationY,
-    value, end, delay, ease, listener
-)
+    ease: EasingFunction? = null,
+    onStart: (() -> Unit)? = null,
+    onEnd: (() -> Unit)? = null
+
+) = animateTo(ViewPropertyAnimator::translationY, value, time, delay, ease, onStart, onEnd)
+
+fun View.toX(
+
+    value: Float,
+    time: Long = 0L,
+    delay: Long = 0L,
+    ease: EasingFunction? = null,
+    onStart: (() -> Unit)? = null,
+    onEnd: (() -> Unit)? = null
+
+) = animateTo(ViewPropertyAnimator::x, value, time, delay, ease, onStart, onEnd)
+
+fun View.toY(
+
+    value: Float,
+    time: Long = 0L,
+    delay: Long = 0L,
+    ease: EasingFunction? = null,
+    onStart: (() -> Unit)? = null,
+    onEnd: (() -> Unit)? = null
+
+) = animateTo(ViewPropertyAnimator::y, value, time, delay, ease, onStart, onEnd)
+
+fun View.toRotation(
+
+    value: Float,
+    time: Long = 0L,
+    delay: Long = 0L,
+    ease: EasingFunction? = null,
+    onStart: (() -> Unit)? = null,
+    onEnd: (() -> Unit)? = null
+
+) = animateTo(ViewPropertyAnimator::rotation, value, time, delay, ease, onStart, onEnd)
+
+fun View.toRotationX(
+
+    value: Float,
+    time: Long = 0L,
+    delay: Long = 0L,
+    ease: EasingFunction? = null,
+    onStart: (() -> Unit)? = null,
+    onEnd: (() -> Unit)? = null
+
+) = animateTo(ViewPropertyAnimator::rotationX, value, time, delay, ease, onStart, onEnd)
+
+fun View.toRotationY(
+
+    value: Float,
+    time: Long = 0L,
+    delay: Long = 0L,
+    ease: EasingFunction? = null,
+    onStart: (() -> Unit)? = null,
+    onEnd: (() -> Unit)? = null
+
+) = animateTo(ViewPropertyAnimator::rotationY, value, time, delay, ease, onStart, onEnd)

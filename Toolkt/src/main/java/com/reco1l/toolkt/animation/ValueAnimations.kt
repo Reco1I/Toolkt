@@ -8,9 +8,8 @@ import kotlin.reflect.KMutableProperty0
 
 // Base
 
-private val DEFAULT_INTERPOLATOR = TimeInterpolator { it }
-
 private fun animateFloat(
+
     onApply: (Float) -> Unit,
     from: Float,
     to: Float,
@@ -22,15 +21,17 @@ private fun animateFloat(
 
     duration = end
     startDelay = delay
-    interpolator = ease ?: DEFAULT_INTERPOLATOR
+    interpolator = ease ?: TimeEasing.LINEAR
 
     addUpdateListener { onApply(it.animatedValue as Float) }
 
-    if (from != to || end == 0L)
+    if (from != to || end == 0L) {
         start()
+    }
 }
 
 private fun animateInt(
+
     onApply: (Int) -> Unit,
     from: Int,
     to: Int,
@@ -42,12 +43,13 @@ private fun animateInt(
 
     duration = end
     startDelay = delay
-    interpolator = ease ?: DEFAULT_INTERPOLATOR
+    interpolator = ease ?: TimeEasing.LINEAR
 
     addUpdateListener { onApply(it.animatedValue as Int) }
 
-    if (from != to || end == 0L)
+    if (from != to || end == 0L) {
         start()
+    }
 }
 
 
@@ -59,6 +61,7 @@ private fun animateInt(
  * If no arguments are passed then it creates a [ValueAnimator] based on the property.
  */
 fun KMutableProperty0<Float>.animateTo(
+
     to: Float = 0f,
     end: Long = 0,
     delay: Long = 0,
@@ -72,6 +75,7 @@ fun KMutableProperty0<Float>.animateTo(
  * If no arguments are passed then it creates a [ValueAnimator] based on the function.
  */
 fun KFunction1<Float, Any>.animate(
+
     from: Float = 0f,
     to: Float = 0f,
     end: Long = 0,
@@ -89,6 +93,7 @@ fun KFunction1<Float, Any>.animate(
  * If no arguments are passed then it creates a [ValueAnimator] based on the property.
  */
 fun KMutableProperty0<Int>.animateTo(
+
     to: Int = 0,
     end: Long = 0,
     delay: Long = 0,
@@ -102,6 +107,7 @@ fun KMutableProperty0<Int>.animateTo(
  * If no arguments are passed then it creates a [ValueAnimator] based on the function.
  */
 fun KFunction1<Int, Any>.animate(
+
     from: Int = 0,
     to: Int = 0,
     end: Long = 0,
@@ -113,8 +119,7 @@ fun KFunction1<Int, Any>.animate(
 
 // Extensions
 
-fun ValueAnimator.doOnUpdate(listener: ValueAnimator.AnimatorUpdateListener): ValueAnimator
-{
+fun ValueAnimator.doOnUpdate(listener: ValueAnimator.AnimatorUpdateListener): ValueAnimator {
     addUpdateListener(listener)
     return this
 }
