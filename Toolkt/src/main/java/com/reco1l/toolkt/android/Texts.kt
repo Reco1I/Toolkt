@@ -2,10 +2,14 @@
 
 package com.reco1l.toolkt.android
 
+import android.content.Context
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.util.TypedValue
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.TextView
+import androidx.core.content.getSystemService
 
 
 /**
@@ -37,6 +41,22 @@ var TextView.fontSize: Float
 var TextView.font: Typeface
     get() = typeface
     set(value) = setTypeface(value, fontStyle)
+
+
+
+/// Input
+
+/**
+ * Forces the [InputMethodManager] to hide the virtual keyboard if it's showing along with clearing
+ * focus in this [EditText].
+ *
+ * @see InputMethodManager.hideSoftInputFromWindow
+ * @see EditText.clearFocus
+ */
+fun EditText.hideKeyboard() {
+    clearFocus()
+    context?.getSystemService<InputMethodManager>()?.hideSoftInputFromWindow(windowToken, 0)
+}
 
 
 /// Drawables
