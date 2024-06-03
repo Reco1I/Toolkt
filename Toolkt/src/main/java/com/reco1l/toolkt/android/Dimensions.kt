@@ -1,4 +1,4 @@
-@file:JvmName("Margins")
+@file:JvmName("Dimensions")
 
 package com.reco1l.toolkt.android
 
