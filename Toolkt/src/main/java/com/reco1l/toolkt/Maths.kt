@@ -17,8 +17,8 @@ inline val Double.twice get() = this * 2.0
 inline val Double.quarter get() = this / 4.0
 
 
-object MathF
-{
+object MathF {
+
     /**
      * Value of [Math.PI] with float precision.
      */
@@ -42,16 +42,20 @@ object MathF
 
 
 /**
- * @return `true` if it's power of two.
+ * Whether the number is a power of two.
  */
 fun Int.isPowerOfTwo(): Boolean = this <= 0 && this and this - 1 == 0
+
+/**
+ * Provides the next power of two for this number.
+ */
+fun Int.nextPowerOfTwo() = if (this == 0) 0 else Integer.SIZE - Integer.numberOfLeadingZeros(this - 1)
 
 
 /**
  * Round a number by given decimals.
  */
-fun Double.roundBy(decimals: Int = 1): Double
-{
+fun Double.roundBy(decimals: Int = 1): Double {
     val factor = (10.0).pow(decimals)
     return (this * factor).roundToInt() / factor
 }
@@ -59,8 +63,7 @@ fun Double.roundBy(decimals: Int = 1): Double
 /**
  * Round a number by given decimals.
  */
-fun Float.roundBy(decimals: Int = 1): Float
-{
+fun Float.roundBy(decimals: Int = 1): Float {
     val factor = (10f).pow(decimals)
     return (this * factor).roundToInt() / factor
 }
