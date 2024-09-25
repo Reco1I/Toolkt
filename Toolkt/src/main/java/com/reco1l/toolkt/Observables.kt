@@ -3,8 +3,7 @@ package com.reco1l.toolkt
 /**
  * Intended to be used in manager classes where many events happens at once that must be listened.
  */
-interface IObservable<T>
-{
+interface IObservable<T> {
 
     /**
      * The list of observers
@@ -16,8 +15,7 @@ interface IObservable<T>
      * @param index The index where the observer should be bind, by default last index.
      * @param observer The observer to be bind.
      */
-    fun bindObserver(index: Int = observers.size, observer: T): Boolean
-    {
+    fun bindObserver(index: Int = observers.size, observer: T): Boolean {
         observers.add(index, observer)
         return index == observers.indexOf(observer)
     }
@@ -31,8 +29,7 @@ interface IObservable<T>
 /**
  * Iterate over all observers.
  */
-inline fun <T> IObservable<T>.forEachObserver(action: (T) -> Unit)
-{
+inline fun <T> IObservable<T>.forEachObserver(action: (T) -> Unit) {
     for (i in 0..<observers.size)
         action(observers[i])
 }
@@ -41,8 +38,7 @@ inline fun <T> IObservable<T>.forEachObserver(action: (T) -> Unit)
 /**
  * Intended to be used in manager classes where many events happens at once that must be listened.
  */
-interface IMapObservable<K, T>
-{
+interface IMapObservable<K, T> {
 
     /**
      * The list of observers
@@ -54,8 +50,7 @@ interface IMapObservable<K, T>
      * @param index The index where the observer should be bind, by default last index.
      * @param observer The observer to be bind.
      */
-    fun bindObserver(key: K, index: Int = observers[key]?.size ?: 0, observer: T): Boolean
-    {
+    fun bindObserver(key: K, index: Int = observers[key]?.size ?: 0, observer: T): Boolean {
         val list = observers.getOrPut(key) { mutableListOf() }
         list.add(index, observer)
         return index == list.indexOf(observer)
@@ -69,8 +64,7 @@ interface IMapObservable<K, T>
     /**
      * Unbind and existent observer.
      */
-    fun unbindObserver(key: K, observer: T): Boolean
-    {
+    fun unbindObserver(key: K, observer: T): Boolean {
         val list = observers[key] ?: return false
         val result = list.remove(observer)
 
@@ -84,10 +78,10 @@ interface IMapObservable<K, T>
 /**
  * Iterate over all observers for a key.
  */
-fun <K, T> IMapObservable<K, T>.forEachObserver(key: K, action: (T) -> Unit)
-{
+fun <K, T> IMapObservable<K, T>.forEachObserver(key: K, action: (T) -> Unit) {
     val list = observers[key] ?: return
 
-    for (i in 0..<list.size)
+    for (i in 0..<list.size) {
         action(list[i])
+    }
 }

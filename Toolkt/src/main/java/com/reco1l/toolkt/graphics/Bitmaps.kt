@@ -14,8 +14,7 @@ import java.io.File
  *
  * @param file The file to get the dimensions from.
  */
-fun Options.calculateDimensions(file: File): Options
-{
+fun Options.calculateDimensions(file: File): Options {
     // This is required to be true otherwise the bitmap will be loaded into memory when we only
     // want to know its dimensions.
     inJustDecodeBounds = true
@@ -32,8 +31,7 @@ fun Options.calculateDimensions(file: File): Options
  *
  * @see BitmapFactory.Options.inSampleSize
  */
-fun Options.approximateSampleSize(targetWidth: Int, targetHeight: Int): Options
-{
+fun Options.approximateSampleSize(targetWidth: Int, targetHeight: Int): Options {
     if (outWidth <= targetWidth && outHeight <= targetHeight)
         return this
 
@@ -50,7 +48,7 @@ fun Options.approximateSampleSize(targetWidth: Int, targetHeight: Int): Options
 /**
  * Decodes a file into a bitmap with this as options.
  */
-fun Options.createBitmap(file: File) = BitmapFactory.decodeFile(file.absolutePath, this)
+fun Options.createBitmap(file: File): Bitmap = BitmapFactory.decodeFile(file.absolutePath, this)
 
 
 // Bitmap
@@ -58,8 +56,7 @@ fun Options.createBitmap(file: File) = BitmapFactory.decodeFile(file.absolutePat
 /**
  * Crops the bitmap in the center to the given dimensions.
  */
-fun Bitmap.cropInCenter(targetWidth: Int, targetHeight: Int): Bitmap
-{
+fun Bitmap.cropInCenter(targetWidth: Int, targetHeight: Int): Bitmap {
     val newX = (width - targetWidth) / 2
     val newY = (height - targetHeight) / 2
 

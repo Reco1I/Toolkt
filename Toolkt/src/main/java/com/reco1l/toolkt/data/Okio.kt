@@ -30,8 +30,7 @@ fun buildUrl(base: String, block: HttpUrl.Builder.() -> Unit) = base.toHttpUrl()
 /**
  * Reads all UTF8 encoded lines until there's nothing left to read.
  */
-inline fun BufferedSource.readUTF8Lines(block: (String) -> Unit)
-{
+inline fun BufferedSource.readUTF8Lines(block: (String) -> Unit) {
     while (readUtf8Line()?.also(block) != null) Unit
     close()
 }
@@ -40,7 +39,6 @@ inline fun BufferedSource.readUTF8Lines(block: (String) -> Unit)
  * Reads all UTF8 encoded lines until there's nothing left to read or the predicate isn't accomplished
  * anymore.
  */
-inline fun BufferedSource.readUTF8LinesUntil(predicate: (String) -> Boolean, block: (String) -> Unit)
-{
+inline fun BufferedSource.readUTF8LinesUntil(predicate: (String) -> Boolean, block: (String) -> Unit) {
     while (readUtf8Line()?.takeUnless(predicate)?.also(block) != null) Unit
 }

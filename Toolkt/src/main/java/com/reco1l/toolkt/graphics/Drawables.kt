@@ -15,10 +15,7 @@ import com.reco1l.toolkt.kotlin.runSafe
 /**
  * Wrap a drawable inside a [ClipDrawable].
  */
-fun Drawable.clip(
-    gravity: Int = Gravity.LEFT,
-    orientation: Int = ClipDrawable.HORIZONTAL
-) = ClipDrawable(this, gravity, orientation)
+fun Drawable.clip(gravity: Int = Gravity.LEFT, orientation: Int = ClipDrawable.HORIZONTAL) = ClipDrawable(this, gravity, orientation)
 
 
 // LayerDrawable
@@ -26,10 +23,10 @@ fun Drawable.clip(
 /**
  * Iterate over all layers.
  */
-fun LayerDrawable.forEach(block: (Drawable) -> Unit)
-{
-    for (i in 0 until numberOfLayers)
+fun LayerDrawable.forEach(block: (Drawable) -> Unit) {
+    for (i in 0 until numberOfLayers) {
         block(getDrawable(i))
+    }
 }
 
 /**
@@ -46,19 +43,16 @@ fun LayerDrawable(vararg layers: Drawable) = LayerDrawable(layers)
  * @param anchor The anchor to apply the radius, if `null` is passed the radius will be applied
  * to all anchors.
  */
-fun GradientDrawable.setRadius(radius: Float, @CornerAnchor anchor: Int? = null)
-{
+fun GradientDrawable.setRadius(radius: Float, @CornerAnchor anchor: Int? = null) {
     val radii = FloatArray(8)
 
-    if (anchor == null)
-    {
+    if (anchor == null) {
         radii.fill(radius)
         cornerRadii = radii
         return
     }
 
-    when (anchor)
-    {
+    when (anchor) {
         Anchor.TOP_LEFT -> radii.fill(radius, 0, 2)
         Anchor.TOP_RIGHT -> radii.fill(radius, 2, 4)
         Anchor.BOTTOM_LEFT -> radii.fill(radius, 4, 6)

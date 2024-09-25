@@ -28,9 +28,9 @@ fun delayed(time: Long, block: () -> Unit) = GlobalScope.launch {
 /**
  * Executes the block if the boolean equals `true`.
  */
-fun Boolean.then(block: () -> Unit): Boolean
-{
-    if (this)
+fun Boolean.then(block: () -> Unit): Boolean {
+    if (this) {
         block()
+    }
     return this
 }

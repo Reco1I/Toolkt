@@ -57,8 +57,7 @@ inline fun JSONArray.forEach(action: (JSONObject) -> Unit) {
  * @throws Exception Advise to catch any conversion error.
  */
 @Experimental
-inline fun <reified T : Any> JSONObject.mapInto(): T?
-{
+inline fun <reified T : Any> JSONObject.mapInto(): T? {
     val constructor = T::class.primaryConstructor ?: return null
     val parameters = constructor.parameters
 
@@ -74,12 +73,9 @@ inline fun <reified T : Any> JSONObject.mapInto(): T?
  * @throws Exception Advise to catch any conversion error.
  */
 @Experimental
-inline fun <reified T : Any> JSONArray.mapIntoListOf(): MutableList<T>?
-{
+inline fun <reified T : Any> JSONArray.mapIntoListOf(): MutableList<T>? {
     val list = mutableListOf<T>()
-
     forEach { list.add(it.mapInto<T>() ?: return null) }
-
     return list.takeUnless { it.isEmpty() }
 }
 
@@ -87,14 +83,13 @@ inline fun <reified T : Any> JSONArray.mapIntoListOf(): MutableList<T>?
 /**
  * Iterator for [JSONArray]
  */
-operator fun JSONArray.iterator(): Iterator<Any> = object : Iterator<Any>
-{
+operator fun JSONArray.iterator(): Iterator<Any> = object : Iterator<Any> {
+
     private var index = 0
 
     override fun hasNext() = index < length()
 
-    override fun next(): Any
-    {
+    override fun next(): Any {
         val element = get(index)
         index++
         return element

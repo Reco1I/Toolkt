@@ -34,10 +34,11 @@ fun File.isExtension(extension: String) = isFile && extension.equals(extension, 
 /**
  * Create a new sub directory.
  */
-fun File.subDirectory(name: String): File
-{
-    if (!isDirectory)
+fun File.subDirectory(name: String): File {
+
+    if (!isDirectory) {
         throw IOException("This isn't a directory.")
+    }
 
     return File(this, name).apply {
 
@@ -49,10 +50,11 @@ fun File.subDirectory(name: String): File
 /**
  * Create a new sub file.
  */
-fun File.subFile(name: String): File
-{
-    if (!isDirectory)
+fun File.subFile(name: String): File {
+
+    if (!isDirectory) {
         throw IOException("This isn't a directory.")
+    }
 
     return File(this, name).apply {
 
@@ -64,8 +66,7 @@ fun File.subFile(name: String): File
 /**
  * Similarly to [File.listFiles].
  */
-fun File.getFiles(vararg extensions: String? = emptyArray()): Array<File>?
-{
+fun File.getFiles(vararg extensions: String? = emptyArray()): Array<File>? {
     return listFiles { file ->
         extensions.isEmpty() || extensions.any { it.equals(file.extension, true) }
     }
@@ -74,42 +75,36 @@ fun File.getFiles(vararg extensions: String? = emptyArray()): Array<File>?
 /**
  * Iterate all over the files inside the directory.
  */
-fun File.forEach(
-    vararg extensions: String? = emptyArray(),
-    selector: ((File) -> Int)? = null,
-    block: (File) -> Unit
-)
-{
+fun File.forEach(vararg extensions: String? = emptyArray(), selector: ((File) -> Int)? = null, block: (File) -> Unit) {
+
     getFiles(*extensions)?.also {
-        if (selector != null)
+        if (selector != null) {
             it.sortedBy(selector).forEach(block)
-        else
+        } else {
             it.forEach(block)
+        }
     }
 }
 
 /**
  * Iterate all over files and sub-directories.
  */
-fun File.forEachRecursive(
-    vararg extensions: String? = emptyArray(),
-    selector: ((File) -> Int)? = null,
-    block: (File) -> Unit
-)
-{
-    val action = { file: File ->
+fun File.forEachRecursive(vararg extensions: String? = emptyArray(), selector: ((File) -> Int)? = null, block: (File) -> Unit) {
 
-        if (file.isDirectory)
+    val action = { file: File ->
+        if (file.isDirectory) {
             file.forEachRecursive(*extensions, selector = selector, block = block)
-        else
+        } else {
             block(file)
+        }
     }
 
     getFiles(*extensions)?.also {
-        if (selector != null)
+        if (selector != null) {
             it.sortedBy(selector).forEach(action)
-        else
+        } else {
             it.forEach(action)
+        }
     }
 }
 
@@ -133,8 +128,7 @@ operator fun List<File>.get(name: String, ignoreCase: Boolean = true) = find {
 /**
  * If the input stream belongs to a file we write it to the destination file.
  */
-fun InputStream.writeToFile(destination: File)
-{
+fun InputStream.writeToFile(destination: File) {
     destination.outputStream().use { copyTo(it) }
 }
 
@@ -149,27 +143,25 @@ fun InputStream.writeToFile(destination: File)
  * If a [File] object is not necessary consider using [InputStream] instead. Also consider using [Uri.toFile]
  * instead if you sure that the URI scheme is [SCHEME_FILE].
  */
-fun Uri.toFile(parent: File, resolver: ContentResolver): File
-{
-    if (scheme == SCHEME_FILE)
+fun Uri.toFile(parent: File, resolver: ContentResolver): File {
+
+    if (scheme == SCHEME_FILE) {
         return toFile()
+    }
 
     val file = File(parent, resolveFilename(resolver))
-
-    resolver.openInputStream(this)?.use { it.writeToFile(file) }
-        ?:
-        throw IOException("Failed to create InputStream from given URI.")
-
+    resolver.openInputStream(this)?.use { it.writeToFile(file) } ?: throw IOException("Failed to create InputStream from given URI.")
     return file
 }
 
 /**
  * Resolves the filename given by the URI.
  */
-fun Uri.resolveFilename(resolver: ContentResolver): String
-{
-    if (scheme != SCHEME_CONTENT)
+fun Uri.resolveFilename(resolver: ContentResolver): String {
+
+    if (scheme != SCHEME_CONTENT) {
         throw UnsupportedOperationException("The URI scheme does not equal \"content\".")
+    }
 
     return resolver.query(this, null, null, null, null)?.use {
 

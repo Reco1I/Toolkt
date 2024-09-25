@@ -33,13 +33,14 @@ infix fun String.isBetween(pair: Pair<Char, Char>) = startsWith(pair.first) && e
  * Returns a substring cropped between the specified characters or `null` if it doesn't contains
  * those characters or the part between them is empty.
  */
-fun String.between(first: Char, last: Char): String?
-{
+fun String.between(first: Char, last: Char): String? {
+
     val firstIndex = indexOf(first)
     val secondIndex = lastIndexOf(last)
 
-    if (firstIndex == -1 || firstIndex + 1 >= secondIndex)
+    if (firstIndex == -1 || firstIndex + 1 >= secondIndex) {
         return null
+    }
 
     return substring(firstIndex + 1, secondIndex).takeUnless { it.isEmpty() }
 }
@@ -47,11 +48,11 @@ fun String.between(first: Char, last: Char): String?
 /**
  * Multiply the characters and create a sequence
  */
-operator fun Char.times(times: Int): CharSequence
-{
+operator fun Char.times(times: Int): CharSequence {
     var result = ""
-    for (i in 0 until abs(times))
+    for (i in 0 until abs(times)) {
         result += this
+    }
     return result
 }
 
@@ -67,8 +68,7 @@ fun String.takeIfMatches(regex: Regex) = takeIf { regex.matches(it) }
 /**
  * Pack of constants with defaults regular expressions.
  */
-object Regexs
-{
+object Regexs {
 
     /**
      * Regex for integer numbers.
@@ -128,10 +128,11 @@ fun String.replaceAlphanumeric(with: String = "_") = replace("[^a-zA-Z0-9.\\-]".
 
 // Escapes
 
-fun String.withTranslatedEscapes(ignoreInvalidSequences: Boolean = true): String
-{
-    if (isEmpty())
+fun String.withTranslatedEscapes(ignoreInvalidSequences: Boolean = true): String {
+
+    if (isEmpty()) {
         return ""
+    }
 
     val sequence = toCharArray()
     val length = sequence.size
@@ -139,16 +140,13 @@ fun String.withTranslatedEscapes(ignoreInvalidSequences: Boolean = true): String
     var from = 0
     var to = 0
 
-    while (from < length)
-    {
+    while (from < length) {
         var ch = sequence[from++]
 
-        if (ch == '\\')
-        {
+        if (ch == '\\') {
             ch = if (from < length) sequence[from++] else '\u0000'
 
-            when (ch)
-            {
+            when (ch) {
                 'b' -> ch = '\b'
                 'f' -> ch = '\u000c'
                 'n' -> ch = '\n'
@@ -157,13 +155,11 @@ fun String.withTranslatedEscapes(ignoreInvalidSequences: Boolean = true): String
                 't' -> ch = '\t'
                 '\'', '\"', '\\' -> Unit
 
-                '0', '1', '2', '3', '4', '5', '6', '7' ->
-                {
+                '0', '1', '2', '3', '4', '5', '6', '7' -> {
                     val limit = min(from + if (ch <= '3') 2 else 1, length)
                     var code = ch.code - '0'.code
 
-                    while (from < limit)
-                    {
+                    while (from < limit) {
                         ch = sequence[from]
 
                         if (ch < '0' || '7' < ch)
@@ -176,18 +172,18 @@ fun String.withTranslatedEscapes(ignoreInvalidSequences: Boolean = true): String
                 }
 
                 '\n' -> continue
-                '\r' ->
-                {
-                    if (from < length && sequence[from] == '\n')
+                '\r' -> {
+                    if (from < length && sequence[from] == '\n') {
                         from++
+                    }
 
                     continue
                 }
 
-                else ->
-                {
-                    if (!ignoreInvalidSequences)
+                else -> {
+                    if (!ignoreInvalidSequences) {
                         throw IllegalArgumentException("Invalid escape sequence: \\%c \\\\u%04X".format(ch, ch.code))
+                    }
                 }
             }
         }
@@ -222,17 +218,14 @@ fun String.fromDate(date: Date = Date()) = DateFormat.format(this, date).toStrin
  * * `HH:mm:ss` gets converted to `12:00:00` format.
  *
  * @param ms The time to be converted.
+ * @param sdf The [SimpleDateFormat] instance to be used.
  * @see SimpleDateFormat
  */
-fun String.formatTimeMilliseconds(ms: Long): String
-{
-    @SuppressLint("SimpleDateFormat")
-    val sdf = SimpleDateFormat(this)
+fun String.formatTimeMilliseconds(ms: Long, @SuppressLint("SimpleDateFormat") sdf: SimpleDateFormat = SimpleDateFormat()): String {
+    sdf.applyPattern(this)
     sdf.timeZone = TimeZone.getTimeZone("GTM+0")
-
     return sdf.format(ms)!!
 }
-
 
 
 /**
@@ -264,34 +257,24 @@ fun String.decodeAsURL(charset: Charset = Charset.defaultCharset()) = URLDecoder
  * @param lowercaseWords Whether the words (excluding the first one) should be lowercased.
  * @param capitalize Whether the first word should be capitalized.
  */
-fun String.splitCamelCase(
-    separator: String = " ",
-    capitalize: Boolean = true,
-    lowercaseWords: Boolean = true
-): String
-{
+fun String.splitCamelCase(separator: String = " ", capitalize: Boolean = true, lowercaseWords: Boolean = true): String {
+
     var r = ""
 
-    for (i in indices)
-    {
+    for (i in indices) {
         val char = get(i)
 
         val p = if (i > 0) get(i - 1) else ' '
         val n = if (i < length - 1) get(i + 1) else ' '
 
-        if (char.isLowerCase())
-            r += if (i == 0 && capitalize)
-                char.uppercaseChar()
-            else
-                char
-        else
-            r += if (p.isUpperCase() && n.isUpperCase() || n == ' ')
-                char
-            else
-                separator + if (lowercaseWords)
-                    char.lowercaseChar()
-                else
-                    char
+        if (char.isLowerCase()) {
+            r += (if (i == 0 && capitalize) char.uppercaseChar() else char)
+            continue
+        }
+
+        r += if (p.isUpperCase() && n.isUpperCase() || n == ' ') char else {
+            separator + (if (lowercaseWords) char.lowercaseChar() else char)
+        }
     }
 
     return r

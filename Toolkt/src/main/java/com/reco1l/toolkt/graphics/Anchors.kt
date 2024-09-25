@@ -20,10 +20,8 @@ import androidx.annotation.IntDef
         Anchor.BOTTOM_CENTER,
     ]
 )
-annotation class Anchor
-{
-    companion object
-    {
+annotation class Anchor {
+    companion object {
         const val CENTER = 0
 
         const val LEFT = 1

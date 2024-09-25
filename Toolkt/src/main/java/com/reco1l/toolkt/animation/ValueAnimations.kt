@@ -2,6 +2,7 @@ package com.reco1l.toolkt.animation
 
 import android.animation.TimeInterpolator
 import android.animation.ValueAnimator
+import android.view.animation.LinearInterpolator
 import kotlin.reflect.KFunction1
 import kotlin.reflect.KMutableProperty0
 
@@ -21,7 +22,10 @@ private fun animateFloat(
 
     duration = end
     startDelay = delay
-    interpolator = ease ?: TimeEasing.LINEAR
+
+    if (ease != null) {
+        interpolator = ease
+    }
 
     addUpdateListener { onApply(it.animatedValue as Float) }
 
@@ -43,7 +47,11 @@ private fun animateInt(
 
     duration = end
     startDelay = delay
-    interpolator = ease ?: TimeEasing.LINEAR
+
+    if (ease != null) {
+        interpolator = ease
+    }
+
 
     addUpdateListener { onApply(it.animatedValue as Int) }
 

@@ -1,5 +1,6 @@
 package com.reco1l.toolkt.animation
 
+import android.animation.TimeInterpolator
 import android.view.View
 import android.view.ViewPropertyAnimator
 
@@ -10,7 +11,7 @@ private fun <T> View.animateTo(
     value: T,
     time: Long,
     delay: Long,
-    timeInterpolator: EasingFunction?,
+    timeInterpolator: TimeInterpolator?,
     onStart: (() -> Unit)? = null,
     onEnd: (() -> Unit)? = null
 
@@ -24,7 +25,10 @@ private fun <T> View.animateTo(
 
         duration = time
         startDelay = delay
-        interpolator = timeInterpolator
+
+        if (timeInterpolator != null) {
+            interpolator = timeInterpolator
+        }
 
         start()
     }
@@ -44,7 +48,7 @@ fun View.toAlpha(
     value: Float,
     time: Long = 0L,
     delay: Long = 0L,
-    ease: EasingFunction? = null,
+    ease: TimeInterpolator? = null,
     onStart: (() -> Unit)? = null,
     onEnd: (() -> Unit)? = null
 
@@ -55,7 +59,7 @@ fun View.toScaleX(
     value: Float,
     time: Long = 0L,
     delay: Long = 0L,
-    ease: EasingFunction? = null,
+    ease: TimeInterpolator? = null,
     onStart: (() -> Unit)? = null,
     onEnd: (() -> Unit)? = null
 
@@ -66,7 +70,7 @@ fun View.toScaleY(
     value: Float,
     time: Long = 0L,
     delay: Long = 0L,
-    ease: EasingFunction? = null,
+    ease: TimeInterpolator? = null,
     onStart: (() -> Unit)? = null,
     onEnd: (() -> Unit)? = null
 
@@ -77,7 +81,7 @@ fun View.toTranslationX(
     value: Float,
     time: Long = 0L,
     delay: Long = 0L,
-    ease: EasingFunction? = null,
+    ease: TimeInterpolator? = null,
     onStart: (() -> Unit)? = null,
     onEnd: (() -> Unit)? = null
 
@@ -88,7 +92,7 @@ fun View.toTranslationY(
     value: Float,
     time: Long = 0L,
     delay: Long = 0L,
-    ease: EasingFunction? = null,
+    ease: TimeInterpolator? = null,
     onStart: (() -> Unit)? = null,
     onEnd: (() -> Unit)? = null
 
@@ -99,7 +103,7 @@ fun View.toX(
     value: Float,
     time: Long = 0L,
     delay: Long = 0L,
-    ease: EasingFunction? = null,
+    ease: TimeInterpolator? = null,
     onStart: (() -> Unit)? = null,
     onEnd: (() -> Unit)? = null
 
@@ -110,7 +114,7 @@ fun View.toY(
     value: Float,
     time: Long = 0L,
     delay: Long = 0L,
-    ease: EasingFunction? = null,
+    ease: TimeInterpolator? = null,
     onStart: (() -> Unit)? = null,
     onEnd: (() -> Unit)? = null
 
@@ -121,7 +125,7 @@ fun View.toRotation(
     value: Float,
     time: Long = 0L,
     delay: Long = 0L,
-    ease: EasingFunction? = null,
+    ease: TimeInterpolator? = null,
     onStart: (() -> Unit)? = null,
     onEnd: (() -> Unit)? = null
 
@@ -132,7 +136,7 @@ fun View.toRotationX(
     value: Float,
     time: Long = 0L,
     delay: Long = 0L,
-    ease: EasingFunction? = null,
+    ease: TimeInterpolator? = null,
     onStart: (() -> Unit)? = null,
     onEnd: (() -> Unit)? = null
 
@@ -143,7 +147,7 @@ fun View.toRotationY(
     value: Float,
     time: Long = 0L,
     delay: Long = 0L,
-    ease: EasingFunction? = null,
+    ease: TimeInterpolator? = null,
     onStart: (() -> Unit)? = null,
     onEnd: (() -> Unit)? = null
 

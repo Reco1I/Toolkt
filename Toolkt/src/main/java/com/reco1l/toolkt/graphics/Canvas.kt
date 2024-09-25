@@ -24,12 +24,10 @@ val RectF.rangeY
 operator fun RectF.contains(event: MotionEvent) = event.x in rangeX && event.y in rangeY
 
 
-fun Path.addRoundRect(rectF: RectF, radius: Float, direction: Direction)
-{
+fun Path.addRoundRect(rectF: RectF, radius: Float, direction: Direction) {
     addRoundRect(rectF, radius, radius, direction)
 }
 
-fun Canvas.drawRoundRect(rectF: RectF, radius: Float, paint: Paint)
-{
+fun Canvas.drawRoundRect(rectF: RectF, radius: Float, paint: Paint) {
     drawRoundRect(rectF, radius, radius, paint)
 }

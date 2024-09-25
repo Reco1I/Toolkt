@@ -1,18 +1,44 @@
 package com.reco1l.toolkt.kotlin
 
 
-
 // Cast
 
 /**
- * This converts the string to boolean allowing numeric booleans (`1` for `true` and `0` for `false`).
+ * This converts the string to boolean allowing numeric booleans.
+ *
+ * Allowed values:
+ * * `0` -> `false`
+ * * `1` -> `true`
+ * * `0.0` -> `false`
+ * * `1.0` -> `true`
+ * * `true` -> `true`
+ * * `false` -> `false`
+ * * `TRUE` -> `true`
+ * * `FALSE` -> `false`
  */
-fun String.toBooleanOrNull(): Boolean?
-{
-    if (length == 1 && (get(0) == '0' || get(0) == '1'))
-        return get(0) == '1'
+fun String?.toBooleanOrNull(): Boolean? {
 
-    return try { toBoolean() } catch (_: Exception) { null }
+    if (isNullOrEmpty()) {
+        return null
+    }
+
+    // Avoiding to run equals() comparison again.
+    val isTrue = equals("true", true)
+    if (isTrue || equals("false", true)) {
+        return isTrue
+    }
+
+    val long = toLongOrNull()
+    if (long == 1L || long == 0L) {
+        return long == 1L
+    }
+
+    val double = toDoubleOrNull()
+    if (double == 1.0 || double == 0.0) {
+        return double == 1.0
+    }
+
+    return null
 }
 
 
