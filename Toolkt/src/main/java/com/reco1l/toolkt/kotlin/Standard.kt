@@ -54,3 +54,24 @@ inline fun <R : Any> runSafe(block: () -> R?): R? {
         null
     }
 }
+
+
+// Recursion
+
+/**
+ * Finds the first non-null result from a hierarchy of objects.
+ *
+ * @param supplier The function to get the parent.
+ * @param transform The function to get the result, or null if not found.
+ */
+inline fun <T, R> T.findHierarchically(supplier: (T) -> T, transform: (T) -> R): R? {
+    var current = this
+    while (current != null) {
+        val result = transform(current)
+        if (result != null) {
+            return result
+        }
+        current = supplier(current)
+    }
+    return null
+}
