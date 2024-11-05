@@ -14,10 +14,24 @@ fun JSONObject.putObject(key: String, block: JSONObject.() -> Unit) {
 }
 
 /**
+ *  Put a new [JSONObject] and allows to insert data in it.
+ */
+fun JSONArray.putObject(block: JSONObject.() -> Unit) {
+    put(JSONObject().apply(block))
+}
+
+/**
  *  Put a new [JSONArray] and allows to insert data in it.
  */
 fun JSONObject.putArray(key: String, block: JSONArray.() -> Unit) {
     put(key, JSONArray().apply(block))
+}
+
+/**
+ *  Put a new [JSONArray] and allows to insert data in it.
+ */
+fun JSONArray.putArray(block: JSONArray.() -> Unit) {
+    put(JSONArray().apply(block))
 }
 
 
